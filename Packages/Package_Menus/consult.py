@@ -1,5 +1,6 @@
-from Packages.Package_SQL.sentences import *
+from Packages.Package_SQL.conection import *
 from Packages.Package_System.system import *
+from Packages.Package_SQL.read import *
 
 def menu_get_data():
     clear_screen()
@@ -8,6 +9,7 @@ def menu_get_data():
           match option:
                case 1:
                     alumnos = fetch_all()
+                    show_all_students(alumnos)
                case 2:
                     while True:
                          clear_screen()
@@ -19,40 +21,24 @@ def menu_get_data():
                               case _:
                                    clear_screen()
                                    alumnos = fetch_value(value)
-                         break
+                                   show_all_students(alumnos)
+                                   break
                case 3:
                     clear_screen()
                     break
+          input("Presione una tecla para continuar...")
           clear_screen()
-          if len(alumnos) > 0:
-               for alumno in alumnos:
-                    message = []
-                    for i in range(len(alumno)):
-                         if alumno[i] != None:
-                              match i:
-                                   case 0:
-                                        message.append(f"ID: {alumno[i]}")
-                                   case 1:
-                                        message.append(f"Nombre: {alumno[i]}")
-                                   case 2:
-                                        message.append(f"Apellido: {alumno[i]}")
-                                   case 3:
-                                        message.append(f"Edad: {alumno[i]}")
-                                   case 4:
-                                        message.append(f"DNI: {alumno[i]}")
-                                   case 5:
-                                        message.append(f"Teléfono padre: {alumno[i]}")
-                                   case 6:
-                                        message.append(f"Teléfono madre: {alumno[i]}")
-                                   case 7:
-                                        message.append(f"Email madre: {alumno[i]}")
-                                   case 8:
-                                        message.append(f"Email padre: {alumno[i]}")
-                                   case 9:
-                                        message.append(f"Alergias: {alumno[i]}")
-                                   case 10:
-                                        message.append(f"curso: {get_course(alumno[i])}")
-                    final_message = " - ".join(message)
-                    print(final_message)
-               input("Presione una tecla para continuar...")
-          clear_screen()
+
+
+"""                     alumnos = [
+    [1, "Juan", "Perez", 15, "12345678", "555-1234", "555-5678", "madre@gmail.com", "padre@gmail.com", "Ninguna", 101],
+    [2, "María", "González", 16, "87654321", "555-9876", "555-5432", "madre2@gmail.com", "padre2@gmail.com", "Ninguna", 102],
+    [3, "Pedro", "López", 14, "13579246", "555-1111", "555-2222", "madre3@gmail.com", "padre3@gmail.com", "Ninguna", 103],
+    [4, "Ana", "Martínez", 17, "24681357", "555-3333", "555-4444", "madre4@gmail.com", "padre4@gmail.com", "Ninguna", 104],
+    [5, "Luis", "Sánchez", 15, "98765432", "555-5555", "555-6666", "madre5@gmail.com", "padre5@gmail.com", "Ninguna", 105],
+    [6, "Laura", "Díaz", 16, "74185296", "555-7777", "555-8888", "madre6@gmail.com", "padre6@gmail.com", "Ninguna", 106],
+    [7, "Carlos", "Gómez", 14, "36925814", "555-9999", "555-0000", "madre7@gmail.com", "padre7@gmail.com", "Ninguna", 107],
+    [8, "Elena", "Fernández", 17, "58274639", "555-1122", "555-3344", "madre8@gmail.com", "padre8@gmail.com", "Ninguna", 108],
+    [9, "Diego", "Ruiz", 15, "16384925", "555-5566", "555-7788", "madre9@gmail.com", "padre9@gmail.com", "Ninguna", 109],
+    [10, "Sofía", "Hernández", 16, "29384716", "555-9900", "555-1122", "madre10@gmail.com", "padre10@gmail.com", "Ninguna", 110]
+] """

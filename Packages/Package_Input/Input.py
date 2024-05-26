@@ -100,13 +100,13 @@ def get_max_number(list: list) -> int:
             number = list[i]
     return number
 
-def continue_loading(message = "¿Desea agregar más datos?\nS/N: ") -> bool:
+def continue_loading(message = "¿Confirmar?\nS/N: ") -> bool:
     value = get_string(message=message,max_length=1,min_length=1).lower()
     while value not in ["s","n"]:
-        value = get_string(message="¿Desea agregar más datos?\nS/N: ",max_length=1,min_length=1).lower()
+        value = get_string(message="¿Confirmar?\nS/N: ",max_length=1,min_length=1).lower()
     return value == "s"
 
-def course_id():
+def course_id() -> int:
     nivel = get_int(message="Ingrese el nivel (numero)\n1 - Primaria | 2 - Jardín\n",min=1,max=2)
     if nivel == 1:
         grado = get_int(message="Ingrese el grado\n1 - 2 - 3 - 4 - 5 - 6 - 7\n",min=1,max=7)
@@ -119,7 +119,7 @@ def course_id():
         id = (grado - 3) * 3 + turno + 21
     return id
 
-def get_course(id_curso):
+def get_course(id_curso: int) -> str:
     if id_curso >= 1 and id_curso <= 21:
         nivel = "Primaria"
         grado = (id_curso - 1) // 3 + 1
@@ -136,4 +136,4 @@ def get_course(id_curso):
     else:
         texto_turno = "HE"
     
-    return f"Nivel: {nivel}, {grado} {texto_turno}"
+    return f"{nivel}, {grado} {texto_turno}"
