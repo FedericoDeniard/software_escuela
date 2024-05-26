@@ -26,11 +26,3 @@ def id_exists(cursor, student_id:int) -> dict:
     sql = 'SELECT 1 FROM alumnos where id=%s'
     cursor.execute(sql, (student_id,))
     return cursor.fetchone()
-# Fetch
-
-
-
-# UPDATE
-
-# DELETE
-
