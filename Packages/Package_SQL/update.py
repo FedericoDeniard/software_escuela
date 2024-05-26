@@ -8,8 +8,9 @@ def update_student():
     if id_exists(cursor,student_id):
         student = fetch_id(student_id)
         student_copy = list(student)
-        print(student_copy)
         while True:
+            clear_screen()
+            print(student_copy)
             show_student(student_copy)
             option = get_int(message="1. Modificar nombre\n2. Modificar apellido\n3. Modificar curso\n4. Modificar edad\n5. Modificar dni\n6. Modificar teléfonos\n7. Modificar correos\n8. Modificar alergias\n9. Ver cambios\n10. Guardar y salir\n11. Cancelar\n")
             match option:
@@ -38,17 +39,21 @@ def update_student():
                     clear_screen()
                     update_student_allergies(student_copy)
                 case 9:
+                    clear_screen()
                     show_student(student_copy)
+                    input("Presione una tecla para continuar...")
                 case 10:
+                    clear_screen()
                     print("Se cargará la siguiente información")
                     show_student(student_copy)
-                    if not continue_loading():
+                    if continue_loading():
                         sql = 'UPDATE alumnos SET nombre=%s,apellido=%s,id_curso=%s,edad=%s,dni=%s,telefono_padre=%s,telefono_madre=%s,mail_padre=%s,mail_madre=%s,alergias=%s WHERE id=%s'
                         info = (student_copy[1],student_copy[2],student_copy[3],student_copy[4],student_copy[5],student_copy[6],student_copy[7],student_copy[8],student_copy[9],student_copy[10],student_id)
                         cursor.execute(sql,info)
                         conection.commit()
                         break
                 case 11:
+                    clear_screen()
                     print("Se perderan los datos modificados")
                     if continue_loading():
                         break 
@@ -62,11 +67,11 @@ def update_student():
 
 def update_student_name(student_copy: dict):
     name = get_string(message="Ingrese el nombre del alumno: ",min_length=1).capitalize()
-    student_copy[2] = name
+    student_copy[1] = name
 
 def update_student_lastname(student_copy: dict):
-    lastname = get_string(message=f"Ingrese el apellido de {student_copy[1]} ",min_length=1).capitalize
-    student_copy[3] = lastname
+    lastname = get_string(message=f"Ingrese el apellido de {student_copy[1]}: ",min_length=1).capitalize()
+    student_copy[2] = lastname
 
 def update_student_course(student_copy: dict):
     course = course_id()
@@ -84,10 +89,10 @@ def update_student_phones(student_copy: dict):
     option = get_int(message="1. Modificar telefono padre\n2. Modificar telefono madre\n",min=1,max=2)
     match option:
         case 1:
-            phone = get_int(message=f"Ingrese el teléfono del padre: ",attempts=1,min=10000000,max=99999999)
+            phone = get_int(message=f"Ingrese el teléfono del padre: ",min=1000000000,max=9999999999)
             student_copy[6] = phone
         case 2:
-            phone = get_int(message=f"Ingrese el teléfono de la madre: ",attempts=1,min=10000000,max=99999999)
+            phone = get_int(message=f"Ingrese el teléfono de la madre: ",min=1000000000,max=9999999999)
             student_copy[7] = phone
 
 def update_student_mails(student_copy: dict):
@@ -101,5 +106,5 @@ def update_student_mails(student_copy: dict):
             student_copy[9] = email
 
 def update_student_allergies(student_copy: dict):
-    allergies = get_string(message=f"Ingrese las alergias de {student_copy["name"]}: ")
+    allergies = get_string(message=f"Ingrese las alergias de {student_copy[1]}: ")
     student_copy[10] = allergies
