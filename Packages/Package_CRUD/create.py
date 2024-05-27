@@ -14,10 +14,12 @@ def new_student():
     name = get_string(message="Ingrese el nombre del alumno: ",min_length=1).capitalize()
     lastname = get_string(message=f"Ingrese el apellido de {name}: ",min_length=1).capitalize()
     course = course_id()
-    age, dni, dad_number, dad_email, mom_number, mom_email, allergies = (None, None, None, None, None, None, None)
+    age, dni, dad_number, dad_email, mom_number, mom_email, allergies = ('', '', '', '', '', '', '')
     if continue_loading():
-        print("Los siguientes valores son opcionales.")
         while True:
+            clear_screen()
+            show_student([0,name,lastname,course,age,dni,dad_number,mom_number,dad_email,mom_email,allergies])
+            print("Los siguientes valores son opcionales.")
             option = get_int(message="¿Que valor desea agregar?\n1. Edad\n2. DNI\n3. Telefonos\n4.Correos\n5.Alergias\n6. Continuar\n",min=1,max=6)
             match option:
                 case 1:
@@ -44,7 +46,8 @@ def new_student():
                     if continue_loading():
                         break
     students = fetch_students()
-    id = int(students[-1][0]) + 1
+    print(len(students))
+    id = (int(students[-1][0]) + 1) if students else 1
     students.append([id,name,lastname,course,age,dni,dad_number,mom_number,dad_email,mom_email,allergies])
     write_students(students)
 
