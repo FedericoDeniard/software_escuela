@@ -1,13 +1,24 @@
 import csv
 from Packages.Package_Input.Input import *
+from datetime import datetime
 
-def fetch_students() -> list:
+def fetch_students(header = False) -> list:
     students = ''
     with open('data/alumnos.csv',newline='') as f:
         data = csv.reader(f, delimiter=',')
-        next(data)
+        if header == False:
+            next(data)
         students = list(data)
     return students
+
+def create_backup():
+    students = fetch_students(True)
+    now = datetime.now()
+    date_string = now.strftime("%Y-%m-%d_%H-%M-%S")
+    with open(f'backup/backup_{date_string}.csv','w',newline='') as f:
+        writer = csv.writer(f,delimiter=',')
+        for student in students:
+            writer.writerow(student)
 
 def fetch_id(id: int) -> list:
     students = fetch_students()
