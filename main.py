@@ -15,6 +15,12 @@ def main():
                                 clear_screen()
                                 break
 
-main()
+
+try:
+        main()
+except Exception as e:
+    with open("error.log", "a") as f:
+        f.write(str(e) + "\n")
+    raise
 
 
