@@ -1,7 +1,7 @@
 from cx_Freeze import setup, Executable
 
 # Lista de archivos a incluir en el archivo ejecutable
-includefiles = ['data/']
+includefiles = ['data/','backup/']
 
 # Configuración de cx_Freeze
 build_exe_options = {

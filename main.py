@@ -4,6 +4,7 @@ from Packages.Package_Menus.modify import *
 from Packages.Package_System.system import *
 
 def main():
+        create_backup()
         while True:
                 option = get_int(message="1. Cargar datos\n2. Consultar datos\n3. Salir\n",min=1,max=3,error_message="Numeros validos del 1 al 3")
                 match option:
