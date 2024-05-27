@@ -12,8 +12,8 @@ build_exe_options = {
 
 setup(
     name="main",
-    version="1.0",
-    description="Descripción de tu programa",
+    version="1.1",
+    description="Software de carga de datos",
     options={"build_exe": build_exe_options},
     executables=[Executable("main.py")]
 )
