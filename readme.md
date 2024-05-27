@@ -34,6 +34,18 @@ root/
 │
 ├── ...
 
+## Create Executable (.exe)
+
+To create an executable (.exe) file, use the following command:
+
+**Windows:**
+`python setup.py build`
+
+**Linux:**
+`wine python setup.py build`
+
+Ensure you have Python and necessary dependencies installed before running these commands.
+
 **Table of Contents**
 
 [TOC]
