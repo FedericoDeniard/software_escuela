@@ -138,7 +138,7 @@ def get_course(id_curso: int) -> str:
     
     return f"{nivel}, {grado} {texto_turno}"
 
-def convert_valuet(student: list):
+def convert_value(student: list):
     age,dni,dad_phone,mom_phone = student[4],student[5],student[6],student[7]
     if validate_number(age):
         age = int(age)

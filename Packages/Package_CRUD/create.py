@@ -1,10 +1,12 @@
 import csv
-from Packages.Package_SQL.read import *
+from Packages.Package_CRUD.read import *
+from Packages.Package_Input.Input import *
 
 def write_students(students: list):
     with open('data/alumnos.csv', 'w',newline='') as f:
         writer = csv.writer(f,delimiter=',')
-        writer.writerow(students)
+        if f.tell() == 0:
+            writer.writerow(['ID', 'Nombre', 'Apellido', 'Id_curso', 'Edad', 'DNI', 'Telefono padre', 'Telefono madre', 'Email padre', 'Email madre', 'Alergias'])
         for student in students:
             writer.writerow(student)
 

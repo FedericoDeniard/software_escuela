@@ -1,6 +1,6 @@
-from Packages.Package_SQL.create import *
-from Packages.Package_SQL.update import *
-from Packages.Package_SQL.delete import *
+from Packages.Package_CRUD.create import *
+from Packages.Package_CRUD.update import *
+from Packages.Package_CRUD.delete import *
 
 
 def menu_set_data():

@@ -1,26 +1,26 @@
-from Packages.Package_SQL.conection import *
+import csv
+from Packages.Package_Input.Input import *
 
 def fetch_students() -> list:
     students = ''
     with open('data/alumnos.csv',newline='') as f:
         data = csv.reader(f, delimiter=',')
+        next(data)
         students = list(data)
     return students
 
 def fetch_id(id: int) -> list:
-    students = ''
-    with open('data/alumnos.csv',newline='') as f:
-        data = csv.reader(f, delimiter=',')
-        students = list(data)
-    target_student = None
-    for i in range(1,len(students)):
+    students = fetch_students()
+    target_student = []
+    for i in range(len(students)):
         if int(students[i][0]) == id:
             target_student = students[i]
             break
     return target_student
 
-def fetch_value(filter: int):
+def fetch_value(filter: int) -> list:
     students = fetch_students()
+    target_students = []
     match filter:
         case 1: # Name
             index = 1
@@ -33,17 +33,16 @@ def fetch_value(filter: int):
         case 3: # Curso
             index = 3
             value = course_id()
-    target_students = []
-    for student in students:
-        if student[index] == value:
-            target_students.append(student)
+    for i in range(len(students)):
+        if students[i][index] == value:
+            target_students.append(students[i])
 
     return target_students
 
 def show_all_students(students: list):
     header = ["ID", "Alumno", "Edad", "DNI", "Teléfono padre", "Teléfono madre", "Email madre", "Email padre", "Alergias", "Curso"]
     print(f"{header[0]:^5}|{header[1]:^20}|{header[2]:^6}|{header[3]:^10}|{header[4]:^17}|{header[5]:^17}|{header[6]:^26}|{header[7]:^26}|{header[8]:^12}|{header[9]:^16}")
-    for i in range(1,len(students)):
+    for i in range(len(students)):
          show_student(students[i], False)
 
 def show_student(student: list,title = True):
@@ -52,7 +51,7 @@ def show_student(student: list,title = True):
         print(f"{header[0]:^5}|{header[1]:^20}|{header[2]:^6}|{header[3]:^10}|{header[4]:^17}|{header[5]:^17}|{header[6]:^26}|{header[7]:^26}|{header[8]:^12}|{header[9]:^16}")
     id = int(student[0])
     name,lastname = student[1],student[2]
-    age,dni,dad_phone,mom_phone = convert_valuet(student)
+    age,dni,dad_phone,mom_phone = student[4],student[5],student[6],student[7]
     allergies = student[10]
     course = get_course(int(student[3]))
     mom_email,dad_email = student[9],student[8]

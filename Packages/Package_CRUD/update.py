@@ -1,16 +1,15 @@
-from Packages.Package_SQL.conection import *
-from Packages.Package_SQL.read import *
+from Packages.Package_CRUD.read import *
+from Packages.Package_CRUD.create import write_students
+
 
 def update_student():
     clear_screen()
-    conection,cursor = start_conection()
     student_id = get_int(message="Ingrese el ID del alumno: ")
-    if id_exists(cursor,student_id):
-        student = fetch_id(student_id)
-        student_copy = list(student)
+    target_student = fetch_id(student_id)
+    if len(target_student) > 0:
+        student_copy = list(target_student)
         while True:
             clear_screen()
-            print(student_copy)
             show_student(student_copy)
             option = get_int(message="1. Modificar nombre\n2. Modificar apellido\n3. Modificar curso\n4. Modificar edad\n5. Modificar dni\n6. Modificar teléfonos\n7. Modificar correos\n8. Modificar alergias\n9. Ver cambios\n10. Guardar y salir\n11. Cancelar\n")
             match option:
@@ -47,10 +46,11 @@ def update_student():
                     print("Se cargará la siguiente información")
                     show_student(student_copy)
                     if continue_loading():
-                        sql = 'UPDATE alumnos SET nombre=%s,apellido=%s,id_curso=%s,edad=%s,dni=%s,telefono_padre=%s,telefono_madre=%s,mail_padre=%s,mail_madre=%s,alergias=%s WHERE id=%s'
-                        info = (student_copy[1],student_copy[2],student_copy[3],student_copy[4],student_copy[5],student_copy[6],student_copy[7],student_copy[8],student_copy[9],student_copy[10],student_id)
-                        cursor.execute(sql,info)
-                        conection.commit()
+                        students = fetch_students()
+                        for i in range(len(students)):
+                            if int(students[i][0]) == student_id:
+                                students[i] = student_copy
+                        write_students(students)
                         break
                 case 11:
                     clear_screen()
@@ -59,7 +59,6 @@ def update_student():
                         break 
     else:
         print(f"No se encontró ningún alumno con el id {student_id}")
-    close_conection(conection,cursor)
 
     input("Presione una tecla para continuar...")
     clear_screen()
