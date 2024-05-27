@@ -3,6 +3,7 @@ from Packages.Package_Input.Input import *
 from Packages.Package_System.system import *
 from dotenv import load_dotenv
 import os
+import csv
 
 
 def start_conection():
@@ -22,7 +23,6 @@ def close_conection(conection, cursor):
     cursor.close()
     conection.close()
 
-def id_exists(cursor, student_id:int) -> dict:
-    sql = 'SELECT 1 FROM alumnos where id=%s'
-    cursor.execute(sql, (student_id,))
-    return cursor.fetchone()
+def id_exists(students: list, student_id:int) -> dict:
+    for student in students:
+    return 

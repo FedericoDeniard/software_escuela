@@ -1,14 +1,18 @@
-from Packages.Package_SQL.conection import *
+import csv
+from Packages.Package_SQL.read import *
 
-# INSERT
+def write_students(students: list):
+    with open('data/alumnos.csv', 'w',newline='') as f:
+        writer = csv.writer(f,delimiter=',')
+        writer.writerow(students)
+        for student in students:
+            writer.writerow(student)
+
 def new_student():
-    conection,cursor = start_conection()
-
     name = get_string(message="Ingrese el nombre del alumno: ",min_length=1).capitalize()
     lastname = get_string(message=f"Ingrese el apellido de {name}: ",min_length=1).capitalize()
     course = course_id()
     age, dni, dad_number, dad_email, mom_number, mom_email, allergies = (None, None, None, None, None, None, None)
-    sql = 'INSERT INTO alumnos (nombre, apellido,id_curso, edad, dni, telefono_padre, telefono_madre, mail_padre,mail_madre, alergias) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
     if continue_loading():
         print("Los siguientes valores son opcionales.")
         while True:
@@ -37,13 +41,11 @@ def new_student():
                 case 6:
                     if continue_loading():
                         break
-    info = (name, lastname, course, age, dni,dad_number,mom_number,dad_email,mom_email,allergies)
-    cursor.execute(sql, info)
-    conection.commit()
-    
-    print(f"Alumno {lastname} {name} cargado.")
-    
-    close_conection(conection,cursor)
+    students = fetch_students()
+    id = int(students[-1][0]) + 1
+    students.append([id,name,lastname,course,age,dni,dad_number,mom_number,dad_email,mom_email,allergies])
+    write_students(students)
 
+    print(f"Alumno {lastname} {name} cargado.")
     input("Presione una tecla para continuar...")
     clear_screen()

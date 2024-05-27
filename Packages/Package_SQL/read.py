@@ -1,71 +1,71 @@
 from Packages.Package_SQL.conection import *
 
-def fetch_all():
-    conection,cursor = start_conection()
+def fetch_students() -> list:
+    students = ''
+    with open('data/alumnos.csv',newline='') as f:
+        data = csv.reader(f, delimiter=',')
+        students = list(data)
+    return students
 
-    sql = 'SELECT * FROM alumnos' 
-    cursor.execute(sql)
-    register = cursor.fetchall()
-
-    close_conection(conection,cursor)
-    return register
+def fetch_id(id: int) -> list:
+    students = ''
+    with open('data/alumnos.csv',newline='') as f:
+        data = csv.reader(f, delimiter=',')
+        students = list(data)
+    target_student = None
+    for i in range(1,len(students)):
+        if int(students[i][0]) == id:
+            target_student = students[i]
+            break
+    return target_student
 
 def fetch_value(filter: int):
+    students = fetch_students()
     match filter:
-        case 1:
-            filter = 'nombre=%s'
-            search = "nombre"
-            value = get_string(message=f"Ingrese el {search} del alumno: ",min_length=1).capitalize()
+        case 1: # Name
+            index = 1
+            value = get_string(message=f"Ingrese el nombre del alumno: ",min_length=1).capitalize()
 
-        case 2:
-            filter = 'apellido=%s'
-            search = "apellido"
-            value = get_string(message=f"Ingrese el {search} del alumno: ",min_length=1).capitalize()
+        case 2: # Lastname
+            index = 2
+            value = get_string(message=f"Ingrese el apellido del alumno: ",min_length=1).capitalize()
 
-        case 3:
-            filter = 'id_curso=%s'
-            search = 'curso'
+        case 3: # Curso
+            index = 3
             value = course_id()
+    target_students = []
+    for student in students:
+        if student[index] == value:
+            target_students.append(student)
 
-    conection,cursor = start_conection()
-    sql = f'SELECT * FROM alumnos where {filter}'
-    cursor.execute(sql,(value,))
-    register = cursor.fetchall()
-    close_conection(conection,cursor)
-    return register
-
-def fetch_id(id:int)->tuple:
-    conection,cursor = start_conection()
-    sql = 'SELECT * FROM alumnos where id=%s'
-    cursor.execute(sql,(id,))
-    register = cursor.fetchone()
-
-    close_conection(conection,cursor)
-    return register
+    return target_students
 
 def show_all_students(students: list):
-    clear_screen()
     header = ["ID", "Alumno", "Edad", "DNI", "Teléfono padre", "Teléfono madre", "Email madre", "Email padre", "Alergias", "Curso"]
     print(f"{header[0]:^5}|{header[1]:^20}|{header[2]:^6}|{header[3]:^10}|{header[4]:^17}|{header[5]:^17}|{header[6]:^26}|{header[7]:^26}|{header[8]:^12}|{header[9]:^16}")
-    for student in students:
-        show_student(student,False)
+    for i in range(1,len(students)):
+         show_student(students[i], False)
 
-    
-
-def show_student(student: tuple,title = True):
+def show_student(student: list,title = True):
     if title:
         header = ["ID", "Alumno", "Edad", "DNI", "Teléfono padre", "Teléfono madre", "Email madre", "Email padre", "Alergias", "Curso"]
         print(f"{header[0]:^5}|{header[1]:^20}|{header[2]:^6}|{header[3]:^10}|{header[4]:^17}|{header[5]:^17}|{header[6]:^26}|{header[7]:^26}|{header[8]:^12}|{header[9]:^16}")
+    id = int(student[0])
+    name,lastname = student[1],student[2]
+    age,dni,dad_phone,mom_phone = convert_valuet(student)
+    allergies = student[10]
+    course = get_course(int(student[3]))
+    mom_email,dad_email = student[9],student[8]
     message = []
-    message.append(f"{student[0] if student[0] is not None else 'none':^5}") # ID
-    message.append(f"{(student[1] if student[1] is not None else 'none') + ' ' + (student[2] if student[2] is not None else 'none'):^20}") # Name and Lastname
-    message.append(f"{student[4] if student[4] is not None else 'none':^6}") # Age
-    message.append(f"{student[5] if student[5] is not None else 'none':^10}") # DNI
-    message.append(f"{student[6] if student[6] is not None else 'none':^17}") # Dad's phone
-    message.append(f"{student[7] if student[7] is not None else 'none':^17}") # Mom's phone
-    message.append(f"{student[9] if student[9] is not None else 'none':^26}") # Mom's email
-    message.append(f"{student[8] if student[8] is not None else 'none':^26}") # Dad's email
-    message.append(f"{student[10] if student[10] is not None else 'none':^12}") # Allergies
-    message.append(f"{get_course(student[3]):^16}") # Course
+    message.append(f"{id:^5}") # ID
+    message.append(f"{name + ' ' + lastname:^20}") # Name and Lastname
+    message.append(f"{age:^6}") # Age
+    message.append(f"{dni:^10}") # DNI
+    message.append(f"{dad_phone:^17}") # Dad's phone
+    message.append(f"{mom_phone:^17}") # Mom's phone
+    message.append(f"{mom_email:^26}") # Mom's email
+    message.append(f"{dad_email:^26}") # Dad's email
+    message.append(f"{allergies:^12}") # Allergies
+    message.append(f"{course:^16}") # Course
     final_message = "|".join(message)
     print(final_message)
