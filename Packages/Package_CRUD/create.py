@@ -1,17 +1,25 @@
-from Packages.Package_SQL.conection import *
+import csv
+from Packages.Package_CRUD.read import *
+from Packages.Package_Input.Input import *
 
-# INSERT
+def write_students(students: list):
+    with open('data/alumnos.csv', 'w',newline='') as f:
+        writer = csv.writer(f,delimiter=',')
+        if f.tell() == 0:
+            writer.writerow(['ID', 'Nombre', 'Apellido', 'Id_curso', 'Edad', 'DNI', 'Telefono padre', 'Telefono madre', 'Email padre', 'Email madre', 'Alergias'])
+        for student in students:
+            writer.writerow(student)
+
 def new_student():
-    conection,cursor = start_conection()
-
     name = get_string(message="Ingrese el nombre del alumno: ",min_length=1).capitalize()
     lastname = get_string(message=f"Ingrese el apellido de {name}: ",min_length=1).capitalize()
     course = course_id()
-    age, dni, dad_number, dad_email, mom_number, mom_email, allergies = (None, None, None, None, None, None, None)
-    sql = 'INSERT INTO alumnos (nombre, apellido,id_curso, edad, dni, telefono_padre, telefono_madre, mail_padre,mail_madre, alergias) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+    age, dni, dad_number, dad_email, mom_number, mom_email, allergies = ('', '', '', '', '', '', '')
     if continue_loading():
-        print("Los siguientes valores son opcionales.")
         while True:
+            clear_screen()
+            show_student([0,name,lastname,course,age,dni,dad_number,mom_number,dad_email,mom_email,allergies])
+            print("Los siguientes valores son opcionales.")
             option = get_int(message="¿Que valor desea agregar?\n1. Edad\n2. DNI\n3. Telefonos\n4.Correos\n5.Alergias\n6. Continuar\n",min=1,max=6)
             match option:
                 case 1:
@@ -37,13 +45,12 @@ def new_student():
                 case 6:
                     if continue_loading():
                         break
-    info = (name, lastname, course, age, dni,dad_number,mom_number,dad_email,mom_email,allergies)
-    cursor.execute(sql, info)
-    conection.commit()
-    
-    print(f"Alumno {lastname} {name} cargado.")
-    
-    close_conection(conection,cursor)
+    students = fetch_students()
+    print(len(students))
+    id = (int(students[-1][0]) + 1) if students else 1
+    students.append([id,name,lastname,course,age,dni,dad_number,mom_number,dad_email,mom_email,allergies])
+    write_students(students)
 
+    print(f"Alumno {lastname} {name} cargado.")
     input("Presione una tecla para continuar...")
     clear_screen()
