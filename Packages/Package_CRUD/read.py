@@ -3,12 +3,15 @@ from Packages.Package_Input.Input import *
 from datetime import datetime
 
 def fetch_students(header = False) -> list:
-    students = ''
-    with open('data/alumnos.csv',newline='') as f:
-        data = csv.reader(f, delimiter=',')
-        if header == False:
-            next(data)
-        students = list(data)
+    students = []
+    try:
+        with open('data/alumnos.csv',newline='') as f:
+            data = csv.reader(f, delimiter=',')
+            if header == False:
+                next(data)
+            students = list(data)
+    except FileNotFoundError:
+        print("No se encuentra el archivo 'alumnos.csv' en la carpeta 'data'. Verifique que se encuentre el archivo en la ruta.\nEn caso contrario, cargar el archivo manualmente o cargar un backup y renombrarlo a 'alumnos.csv'")
     return students
 
 def create_backup():

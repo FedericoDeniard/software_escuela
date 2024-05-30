@@ -3,6 +3,9 @@ from Packages.Package_Menus.consult import *
 from Packages.Package_Menus.modify import *
 from Packages.Package_System.system import *
 
+import traceback
+import datetime
+
 def main():
         create_backup()
         while True:
@@ -18,10 +21,9 @@ def main():
 
 
 try:
-        main()
+    main()
 except Exception as e:
+    today = datetime.datetime.now().strftime("%Y-%m-%d")
     with open("error.log", "a") as f:
-        f.write(str(e) + "\n")
+        f.write(today +"\n"+ traceback.format_exc() + "--------------------------------------------")
     raise
-
-

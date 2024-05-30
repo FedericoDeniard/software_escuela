@@ -180,3 +180,5 @@ pyrightconfig.json
 main.spec
 error.log
 versions.txt
+backup/*
+data/*
