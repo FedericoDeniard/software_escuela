@@ -182,3 +182,4 @@ error.log
 versions.txt
 backup/*
 data/*
+myenv
